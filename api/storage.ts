@@ -7,7 +7,8 @@ let cachedToken: string | null = null;
 let cachedUser: any = null;
 
 export const storage = {
-  saveToken: async (token: string) => {
+  // Renombrado a setToken según requerimiento
+  setToken: async (token: string) => {
     try {
       cachedToken = token;
       await SecureStore.setItemAsync(TOKEN_KEY, token);

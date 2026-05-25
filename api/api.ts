@@ -2,6 +2,9 @@ import axios from 'axios';
 import { API_CONFIG } from '../constants/api';
 import { storage } from './storage';
 
+// REQUERIMIENTO: Log de la Base URL para confirmar configuración
+console.log("API BASE URL:", API_CONFIG.BASE_URL);
+
 const api = axios.create({
   baseURL: API_CONFIG.BASE_URL,
   timeout: API_CONFIG.TIMEOUT,
@@ -23,16 +26,23 @@ api.interceptors.request.use(async (config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // REQUERIMIENTO: Logs de error detallados para depuración de rutas
+    console.log("API ERROR STATUS:", error.response?.status);
+    console.log("API ERROR DATA:", JSON.stringify(error.response?.data, null, 2));
+    console.log("API ERROR FULL URL:", `${error.config?.baseURL}${error.config?.url}`);
+    console.log("API ERROR URL PATH:", error.config?.url);
+
     let message = 'Error de conexión';
     if (error.response) {
-      // El servidor respondió con error (4xx, 5xx)
-      message = error.response.data?.message || 'Error del servidor';
+      message =
+        error.response.data?.message ||
+        error.response.data?.error ||
+        error.response.data?.detail ||
+        `Error del servidor (${error.response.status})`;
     } else if (error.request) {
-      // No hubo respuesta (Timeout o IP incorrecta)
-      message = 'No se pudo conectar con el servidor. Verifica que tu PC y celular estén en la misma red Wifi y que la IP sea correcta.';
+      message = 'No se pudo conectar con el servidor. Verifica tu conexión a internet o espera unos segundos mientras Render despierta el backend.';
     }
 
-    // Devolvemos siempre un objeto con mensaje para evitar crasheos en la UI
     return Promise.reject({ message });
   }
 );
