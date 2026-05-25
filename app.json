@@ -23,7 +23,8 @@
       "usesCleartextTraffic": true,
       "permissions": [
         "android.permission.INTERNET"
-      ]
+      ],
+      "package": "com.td2727.urbanpulsemobile"
     },
     "web": {
       "output": "static",
@@ -48,6 +49,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "95585e0f-52ed-4b49-af29-77cfaaa28fdb"
+      }
     }
   }
 }
